@@ -1,15 +1,16 @@
-package com.example.jaison.hasura_todo.tables;
+package com.example.jaison.hasura_todo.db.tables;
 
-import com.google.gson.reflect.*;
+import com.example.jaison.hasura_todo.db.tables.records.TodoRecord;
+import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.sql.Date;
-import java.sql.Time;
-import com.google.gson.JsonElement;
-import io.hasura.db.*;
-import com.example.jaison.hasura_todo.tables.records.*;
+
+import io.hasura.db.DeleteResult;
+import io.hasura.db.InsertResult;
+import io.hasura.db.PGField;
+import io.hasura.db.Table;
+import io.hasura.db.UpdateResult;
 public class Todo extends Table<TodoRecord> {
     public static final Todo TODO = new Todo();
 

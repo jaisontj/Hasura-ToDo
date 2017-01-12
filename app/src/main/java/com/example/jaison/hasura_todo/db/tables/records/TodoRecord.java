@@ -1,4 +1,4 @@
-package com.example.jaison.hasura_todo.tables.records;
+package com.example.jaison.hasura_todo.db.tables.records;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;

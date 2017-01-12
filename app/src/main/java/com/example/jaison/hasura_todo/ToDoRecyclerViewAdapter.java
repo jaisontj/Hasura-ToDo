@@ -1,9 +1,15 @@
 package com.example.jaison.hasura_todo;
 
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.jaison.hasura_todo.db.tables.records.TodoRecord;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jaison on 11/01/17.
@@ -11,8 +17,17 @@ import android.view.ViewGroup;
 
 public class ToDoRecyclerViewAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
 
+    List<TodoRecord> data = new ArrayList<>();
 
-    public ToDoRecyclerViewAdapter() {
+    public interface Interactor {
+        void onTodoClicked(int position, TodoRecord record);
+        void onTodoLongClicked(int position, TodoRecord record);
+    }
+
+    Interactor interactor;
+
+    public ToDoRecyclerViewAdapter(Interactor interactor) {
+        this.interactor = interactor;
     }
 
     @Override
@@ -23,20 +38,61 @@ public class ToDoRecyclerViewAdapter extends RecyclerView.Adapter<ToDoViewHolder
 
     @Override
     public void onBindViewHolder(ToDoViewHolder holder, final int position) {
+        final TodoRecord todoRecord = data.get(position);
+        holder.description.setText(todoRecord.title);
+        holder.checkbox.setChecked(todoRecord.completed);
 
+        if(todoRecord.completed){
+            holder.description.setPaintFlags(holder.description.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }else{
+            holder.description.setPaintFlags(holder.description.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                interactor.onTodoLongClicked(position,todoRecord);
+                return true;
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                interactor.onTodoClicked(position,todoRecord);
+            }
+        });
+
+        holder.checkbox.setClickable(false);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return data.size();
     }
 
-    public void updateData(int position, ToDo todo) {
+    public void setData(List<TodoRecord> recordList) {
+        this.data = recordList;
+        notifyDataSetChanged();
     }
 
-    public void removeData(int position) {
+    public void deleteData(int position, TodoRecord record) {
+        this.data.remove(position);
+//        notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
+    public void updateData(int position, TodoRecord record) {
+        this.data.set(position,record);
+//        notifyItemChanged(position);
+        notifyDataSetChanged();
+    }
+
+    public void addData(TodoRecord record) {
+        this.data.add(record);
+//        notifyItemInserted(this.data.size());
+        notifyDataSetChanged();
+    }
 
 
 

@@ -1,8 +1,7 @@
-package com.example.jaison.hasura_todo;
+package com.example.jaison.hasura_todo.db;
 
-import com.example.jaison.hasura_todo.tables.*;
+import com.example.jaison.hasura_todo.db.tables.Todo;
 
 public class Tables {
-    public static final Todo TODO = com.example.jaison.hasura_todo.tables.Todo.TODO;
-
+    public static final Todo TODO = Todo.TODO;
 }
